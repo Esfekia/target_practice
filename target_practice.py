@@ -1,0 +1,1 @@
+# A simple game where player tries to shoot a moving target practice on other side of the screen.

@@ -11,6 +11,7 @@ class Settings:
 
 		#Ship settings
 		self.ship_speed = 1.5
+		self.ship_limit = 3
 
 		#Bullet settings
 		self.bullet_speed = 1.5
@@ -31,4 +32,4 @@ class Settings:
 
 		#Game Mechanics
 		self.number_miss =3
-		self.game_active = True
+		

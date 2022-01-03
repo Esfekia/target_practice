@@ -6,8 +6,8 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
-#from game_stats import GameStats
-#from button import Button
+from gamestats import GameStats
+from button import Button
 from target import Target
 
 class TargetPractice:
@@ -25,17 +25,15 @@ class TargetPractice:
 		pygame.display.set_caption("Target Practice")
 
 		#Create an instance to store the game statistics.
-		#self.stats = GameStats(self)
+		self.stats = GameStats(self)
 		self.ship = Ship(self)
 		self.bullets = pygame.sprite.Group()
 		
 		#Create the Target Rectangle.
 		self.target = Target(self)
-		#Create the rectangular, moving target.
-		#self._create_target()
-
+		
 		#Create the Play button.
-		#self.play_button = Button(self, "Play") 
+		self.play_button = Button(self, "Play") 
 
 
 	def run_game(self):
@@ -46,7 +44,7 @@ class TargetPractice:
 			self._check_events()
 
 			#Check if game still active first!
-			if self.settings.game_active:
+			if self.stats.game_active:
 				#Update the ship's position.
 				self.ship.update()
 
@@ -54,10 +52,11 @@ class TargetPractice:
 				self._update_bullets()
 
 				#Update the target's movement:
-				self._update_target()
+				#self._update_target()
+				self.target.update()
 
-				#Redraw the screen during each pass through the loop.
-				self._update_screen()
+			#Redraw the screen during each pass through the loop.
+			self._update_screen()
 
 	def _check_events(self):
 		"""Respond to key presses and mouse events."""
@@ -68,9 +67,21 @@ class TargetPractice:
 				self._check_keydown_events(event)
 			elif event.type == pygame.KEYUP:
 				self._check_keyup_events(event)
-			#elif event.type == pygame.MOUSEBUTTONDOWN:
-				#mouse_pos = pygame.mouse.get_pos()
-				#self._check_play_button(mouse_pos)
+			elif event.type == pygame.MOUSEBUTTONDOWN:
+				mouse_pos = pygame.mouse.get_pos()
+				self._check_play_button(mouse_pos)
+
+	def _check_play_button(self, mouse_pos):
+		"""Start a new game when the player clicks play"""
+		button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+		if button_clicked and not self.stats.game_active:
+			#Reset the game statistics and set active flag
+			self.stats.game_active = True
+			self.bullets.empty()
+			self.ship.center_ship()
+
+			#Hide the mouse cursor
+			pygame.mouse.set_visible(False)
 
 	def _check_keydown_events(self,event):
 		"""Respond to key presses."""
@@ -82,6 +93,14 @@ class TargetPractice:
 			self._fire_bullet()
 		elif event.key == pygame.K_q:
 			sys.exit()
+		elif event.key == pygame.K_p and not self.stats.game_active:
+			#Reset the game statistics and set active flag.
+			self.stats.game_active = True
+			self.bullets.empty()
+			self.ship.center_ship()
+
+			#Hide the mouse cursor
+			pygame.mouse.set_visible(False)
 
 	def _check_keyup_events(self,event):
 		"""Respond to key releases."""
@@ -112,7 +131,7 @@ class TargetPractice:
 				self.settings.number_miss-=1
 				print (f"Lives left" +str(self.settings.number_miss))
 				if self.settings.number_miss == 0:
-					self.settings.game_active=False
+					self.stats.game_active=False
 				self.bullets.remove(bullet)
 
 		self.check_bullet_target_collisions()
@@ -139,6 +158,10 @@ class TargetPractice:
 
 		#Draw the target
 		self.target.draw_target()
+
+		#Draw the play button if the game is inactive.
+		if not self.stats.game_active:
+			self.play_button.draw_button()
 
 		#Make the most recently drawn screen visible.
 		pygame.display.flip()

@@ -18,6 +18,7 @@ class Ship:
 
 		#Store a decimal value for the ships x,y position.
 		self.x = float (self.rect.x)
+		self.y = float (self.rect.y)
 
 		#Movement flag
 		self.moving_up = False
@@ -44,4 +45,4 @@ class Ship:
 
 	def blitme(self):
 		"""Draw the ship at its current location."""
-		self.screen.bli(self.image, self.rect)
+		self.screen.blit(self.image, self.rect)

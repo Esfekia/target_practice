@@ -76,6 +76,7 @@ class TargetPractice:
 		button_clicked = self.play_button.rect.collidepoint(mouse_pos)
 		if button_clicked and not self.stats.game_active:
 			#Reset the game statistics and set active flag
+			self.stats.reset_stats()
 			self.stats.game_active = True
 			self.bullets.empty()
 			self.ship.center_ship()
@@ -95,6 +96,7 @@ class TargetPractice:
 			sys.exit()
 		elif event.key == pygame.K_p and not self.stats.game_active:
 			#Reset the game statistics and set active flag.
+			self.stats.reset_stats()
 			self.stats.game_active = True
 			self.bullets.empty()
 			self.ship.center_ship()
@@ -132,6 +134,8 @@ class TargetPractice:
 				print (f"Lives left" +str(self.settings.number_miss))
 				if self.settings.number_miss == 0:
 					self.stats.game_active=False
+					pygame.mouse.set_visible(True)
+					self.settings.number_miss = 3
 				self.bullets.remove(bullet)
 
 		self.check_bullet_target_collisions()

@@ -6,10 +6,9 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
-#from rectangle import Rectangle
 #from game_stats import GameStats
 #from button import Button
-#from target import Target
+from target import Target
 
 class TargetPractice:
 	"""Overall class to manage game assets and behavior."""
@@ -30,6 +29,8 @@ class TargetPractice:
 		self.ship = Ship(self)
 		self.bullets = pygame.sprite.Group()
 		
+		#Create the Target Rectangle.
+		self.target = Target(self)
 		#Create the rectangular, moving target.
 		#self._create_target()
 
@@ -109,6 +110,9 @@ class TargetPractice:
 		#Draw the bullets
 		for bullet in self.bullets.sprites():
 			bullet.draw_bullet()
+
+		#Draw the target
+		self.target.draw_target()
 
 		#Make the most recently drawn screen visible.
 		pygame.display.flip()

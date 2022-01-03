@@ -41,11 +41,43 @@ class TargetPractice:
 		"""Start the main loop for the game."""
 		while True:
 
+			#Watch for keyboard and mouse events.
+			self._check_events()
+
 			#Update the ship's position.
 			self.ship.update()
 
 			#Redraw the screen during each pass through the loop.
 			self._update_screen()
+
+	def _check_events(self):
+		"""Respond to key presses and mouse events."""
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				sys.exit()
+			elif event.type == pygame.KEYDOWN:
+				self._check_keydown_events(event)
+			elif event.type == pygame.KEYUP:
+				self._check_keyup_events(event)
+			#elif event.type == pygame.MOUSEBUTTONDOWN:
+				#mouse_pos = pygame.mouse.get_pos()
+				#self._check_play_button(mouse_pos)
+
+	def _check_keydown_events(self,event):
+		"""Respond to key presses."""
+		if event.key == pygame.K_UP:
+			self.ship.moving_up = True
+		elif event.key == pygame.K_DOWN:
+			self.ship.moving_down = True
+		elif event.key == pygame.K_q:
+			sys.exit()
+
+	def _check_keyup_events(self,event):
+		"""Respond to key releases."""
+		if event.key == pygame.K_UP:
+			self.ship.moving_up = False
+		elif event.key == pygame.K_DOWN:
+			self.ship.moving_down = False
 
 	def _update_screen(self):
 		"""Update images on the screen and flip to the new screen."""

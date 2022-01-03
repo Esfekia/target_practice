@@ -13,7 +13,7 @@ class Settings:
 		self.ship_speed = 1.5
 
 		#Bullet settings
-		self.bullet_speed = 0.5
+		self.bullet_speed = 1.5
 		self.bullet_width = 15
 		self.bullet_height = 15
 		self.bullet_color = (252,15,192)
@@ -24,4 +24,8 @@ class Settings:
 		self.target_width = 50
 		self.target_height = 200
 		self.target_color = (0,255,0)
+		self.target_speed = 1.0
+
+		#target_direction of 1 represents down, -1 represents up.
+		self.target_direction = -1
 		

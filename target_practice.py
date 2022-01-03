@@ -51,6 +51,9 @@ class TargetPractice:
 			#Update the bullet's position.
 			self._update_bullets()
 
+			#Update the target's movement:
+			self._update_target()
+
 			#Redraw the screen during each pass through the loop.
 			self._update_screen()
 
@@ -92,6 +95,10 @@ class TargetPractice:
 			new_bullet = Bullet(self)
 			self.bullets.add(new_bullet)
 
+	def _create_target(self):
+		"""Create the target"""
+		target = Target(self)
+
 	def _update_bullets(self):
 		"""Update position of bullets and get rid of old bullets."""
 		#Update bullet positions.
@@ -101,6 +108,10 @@ class TargetPractice:
 		for bullet in self.bullets.copy():
 			if bullet.rect.right >= self.settings.screen_width:
 				self.bullets.remove(bullet)
+
+	def _update_target(self):
+		"""Update the position of the target"""
+		self.target.update()
 
 	def _update_screen(self):
 		"""Update images on the screen and flip to the new screen."""

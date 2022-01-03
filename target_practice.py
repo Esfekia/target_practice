@@ -5,7 +5,7 @@ import pygame
 
 from settings import Settings
 from ship import Ship
-#from bullet import Bullet
+from bullet import Bullet
 #from rectangle import Rectangle
 #from game_stats import GameStats
 #from button import Button
@@ -28,7 +28,7 @@ class TargetPractice:
 		#Create an instance to store the game statistics.
 		#self.stats = GameStats(self)
 		self.ship = Ship(self)
-		#self.bullets = pygame.sprite.Group()
+		self.bullets = pygame.sprite.Group()
 		
 		#Create the rectangular, moving target.
 		#self._create_target()
@@ -46,6 +46,9 @@ class TargetPractice:
 
 			#Update the ship's position.
 			self.ship.update()
+
+			#Update the bullet's position.
+			self._update_bullets()
 
 			#Redraw the screen during each pass through the loop.
 			self._update_screen()
@@ -69,6 +72,8 @@ class TargetPractice:
 			self.ship.moving_up = True
 		elif event.key == pygame.K_DOWN:
 			self.ship.moving_down = True
+		elif event.key == pygame.K_SPACE:
+			self._fire_bullet()
 		elif event.key == pygame.K_q:
 			sys.exit()
 
@@ -79,10 +84,31 @@ class TargetPractice:
 		elif event.key == pygame.K_DOWN:
 			self.ship.moving_down = False
 
+	def _fire_bullet(self):
+		"""Create a new bullet and add it to the bullets group."""
+		#First check max bullets allowed in settings.
+		if len(self.bullets) < self.settings.bullets_allowed:
+			new_bullet = Bullet(self)
+			self.bullets.add(new_bullet)
+
+	def _update_bullets(self):
+		"""Update position of bullets and get rid of old bullets."""
+		#Update bullet positions.
+		self.bullets.update()
+
+		#Get rid of bullets that disappeared off screen.
+		for bullet in self.bullets.copy():
+			if bullet.rect.right >= self.settings.screen_width:
+				self.bullets.remove(bullet)
+
 	def _update_screen(self):
 		"""Update images on the screen and flip to the new screen."""
 		self.screen.fill(self.settings.bg_color)
 		self.ship.blitme()
+
+		#Draw the bullets
+		for bullet in self.bullets.sprites():
+			bullet.draw_bullet()
 
 		#Make the most recently drawn screen visible.
 		pygame.display.flip()

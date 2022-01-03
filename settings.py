@@ -28,4 +28,7 @@ class Settings:
 
 		#target_direction of 1 represents down, -1 represents up.
 		self.target_direction = -1
-		
+
+		#Game Mechanics
+		self.number_miss =3
+		self.game_active = True

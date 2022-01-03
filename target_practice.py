@@ -45,17 +45,19 @@ class TargetPractice:
 			#Watch for keyboard and mouse events.
 			self._check_events()
 
-			#Update the ship's position.
-			self.ship.update()
+			#Check if game still active first!
+			if self.settings.game_active:
+				#Update the ship's position.
+				self.ship.update()
 
-			#Update the bullet's position.
-			self._update_bullets()
+				#Update the bullet's position.
+				self._update_bullets()
 
-			#Update the target's movement:
-			self._update_target()
+				#Update the target's movement:
+				self._update_target()
 
-			#Redraw the screen during each pass through the loop.
-			self._update_screen()
+				#Redraw the screen during each pass through the loop.
+				self._update_screen()
 
 	def _check_events(self):
 		"""Respond to key presses and mouse events."""
@@ -107,7 +109,20 @@ class TargetPractice:
 		#Get rid of bullets that disappeared off screen.
 		for bullet in self.bullets.copy():
 			if bullet.rect.right >= self.settings.screen_width:
+				self.settings.number_miss-=1
+				print (f"Lives left" +str(self.settings.number_miss))
+				if self.settings.number_miss == 0:
+					self.settings.game_active=False
 				self.bullets.remove(bullet)
+
+		self.check_bullet_target_collisions()
+
+	def check_bullet_target_collisions(self):
+		"""Respond to bullet-target collissions."""
+
+		#Remove any bullets that have collided.
+		collissions = pygame.sprite.spritecollide(
+			self.target,self.bullets,True)
 
 	def _update_target(self):
 		"""Update the position of the target"""

@@ -131,9 +131,12 @@ class TargetPractice:
 		for bullet in self.bullets.copy():
 			if bullet.rect.right >= self.settings.screen_width:
 				self.settings.number_miss-=1
-				print (f"Lives left" +str(self.settings.number_miss))
+				#print (f"Lives left" +str(self.settings.number_miss))
 				if self.settings.number_miss == 0:
 					self.stats.game_active=False
+					self.settings.ship_speed = 1.5
+					self.settings.bullet_speed = 2
+					self.settings.target_speed = 0.5
 					pygame.mouse.set_visible(True)
 					self.settings.number_miss = 3
 				self.bullets.remove(bullet)
@@ -146,6 +149,12 @@ class TargetPractice:
 		#Remove any bullets that have collided.
 		collissions = pygame.sprite.spritecollide(
 			self.target,self.bullets,True)
+		if collissions:
+			#Update target_hit stat and check if it is time to increase speed.
+			self.settings.target_hit += 1
+			if self.settings.target_hit == 3:
+				self.settings.increase_speed()
+				self.settings.target_hit = 0
 
 	def _update_target(self):
 		"""Update the position of the target"""
